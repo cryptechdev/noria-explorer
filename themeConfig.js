@@ -9,9 +9,9 @@ export const $themeBreakpoints = {}
 // APP CONFIG
 export const $themeConfig = {
   app: {
-    appName: 'PING.PUB', // Will update name in navigation menu (Branding)
+    appName: 'NORIA', // Will update name in navigation menu (Branding)
     // eslint-disable-next-line global-require
-    appLogoImage: '/logo.svg', // Will update logo in navigation menu (Branding)
+    appLogoImage: 'https://cryptech-assets.s3.us-west-2.amazonaws.com/public/noria.png', // Will update logo in navigation menu (Branding)
   },
   layout: {
     isRTL: false,

@@ -13,18 +13,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('@/views/Home.vue'),
-      meta: {
-        layout: 'full',
-        pageTitle: 'Home',
-        breadcrumb: [
-          {
-            text: 'Home',
-            active: true,
-          },
-        ],
-      },
+      redirect: '/noria',
     },
     {
       path: '/coffee',
