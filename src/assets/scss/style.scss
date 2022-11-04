@@ -4,3 +4,16 @@ NOTE:
 ------
 PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+.no-object-fit .b-avatar-img,
+.no-object-fit .b-avatar-img img {
+  object-fit: contain;
+}
+
+body:not(.dark-layout) .light-img {
+  display: none
+}
+
+body.dark-layout .dark-img {
+  display: none
+}

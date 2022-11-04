@@ -17,7 +17,7 @@
         :src="item.icon"
         icon="people-fill"
         size="sm"
-        class="mr-1"
+        class="mr-1 no-object-fit"
       />
 
       <span class="menu-title text-truncate text-uppercase">{{ item.title }}</span>

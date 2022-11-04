@@ -4,13 +4,13 @@
     "rpc":["https://chaos-rpc.cryptodollar.dev:443"],
     "sdk_version": "0.45.4",
     "addr_prefix": "noria",
-    "logo": "https://cryptech-assets.s3.us-west-2.amazonaws.com/public/noria.png",
+    "logo": "/logo.svg",
     "coin_type": "118",
     "min_tx_fee": "100",
     "assets": [{
         "base": "unoria",
         "symbol": "NORIA",
         "exponent": "6",
-        "logo": "https://cryptech-assets.s3.us-west-2.amazonaws.com/public/noria.png"
+        "logo": "/logo.svg"
     }]
 }
