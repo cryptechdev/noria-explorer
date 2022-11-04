@@ -8,20 +8,15 @@
     responsive="sm"
   >
     <b-tbody>
-      <b-tr
-        v-for="(value, name) in tablefield"
-        :key="name"
-      >
-        <b-td
-          style="text-transform: capitalize; vertical-align: top;"
-        >
+      <b-tr v-for="(value, name) in tablefield" :key="name">
+        <b-td style="text-transform: capitalize; vertical-align: top">
           {{ formatTitle(name) }}
         </b-td>
         <b-td v-if="isTokenField(value)">
-          {{ formatTokens( value ) }}
+          {{ formatTokens(value) }}
         </b-td>
         <b-td v-else-if="isArrayText(value)">
-          {{ value.join(', ') }}
+          {{ value.join(", ") }}
         </b-td>
         <b-td v-else-if="isHex(value)">
           {{ formatHexAddress(value) }}
@@ -30,11 +25,12 @@
           <array-field-component :tablefield="value" />
         </b-td>
         <b-td
-          v-else-if="typeof (value) ==='object'"
+          v-else-if="typeof value === 'object'"
           hover
           class="overflow-hidden"
         >
-          <b-tabs
+          <pre>{{ JSON.stringify(value, null, 4) }}</pre>
+          <!-- <b-tabs
             v-if="value"
             small
           >
@@ -62,16 +58,18 @@
                 style="max-width: 800px; max-height: 300px; overflow: auto;"
               >{{ value[key] }}</div>
             </b-tab>
-          </b-tabs>
+          </b-tabs> -->
         </b-td>
         <b-td v-else>
-          <VueMarkdown v-if="name==='description'">
+          <VueMarkdown v-if="name === 'description'">
             {{ addNewLine(value) }}
           </VueMarkdown>
           <div
             v-else
-            style="max-width: 800px; max-height: 300px; overflow: auto;"
-          >{{ value }}</div>
+            style="max-width: 800px; max-height: 300px; overflow: auto"
+          >
+            {{ value }}
+          </div>
         </b-td>
       </b-tr>
     </b-tbody>
@@ -79,17 +77,21 @@
 </template>
 
 <script>
+import { BTableSimple, BTr, BTd, BTabs, BTab, BTbody } from "bootstrap-vue";
 import {
-  BTableSimple, BTr, BTd, BTabs, BTab, BTbody,
-} from 'bootstrap-vue'
-import {
-  abbr, getStakingValidatorByHex, isHexAddress, isStringArray, isToken, percent, tokenFormatter,
-} from '@/libs/utils'
-import VueMarkdown from 'vue-markdown'
-import ArrayFieldComponent from './ArrayFieldComponent.vue'
+  abbr,
+  getStakingValidatorByHex,
+  isHexAddress,
+  isStringArray,
+  isToken,
+  percent,
+  tokenFormatter,
+} from "@/libs/utils";
+import VueMarkdown from "vue-markdown";
+import ArrayFieldComponent from "./ArrayFieldComponent.vue";
 
 export default {
-  name: 'ObjectFieldComponent',
+  name: "ObjectFieldComponent",
   components: {
     BTableSimple,
     BTr,
@@ -118,12 +120,12 @@ export default {
         },
         linkAttributes: {
           attrs: {
-            target: '_blank',
-            rel: 'noopener',
+            target: "_blank",
+            rel: "noopener",
           },
         },
       },
-    }
+    };
   },
   methods: {
     formatObject(value) {
@@ -132,47 +134,49 @@ export default {
       //   console.log(value)
       //   return value[Object.keys(value)[0]]
       // }
-      return value
+      return value;
     },
-    formatTitle: v => String(v).replaceAll('_', ' '),
+    formatTitle: (v) => String(v).replaceAll("_", " "),
     isObjectText(v) {
-      return String(v).startsWith('{') && String(v).endsWith('}')
+      return String(v).startsWith("{") && String(v).endsWith("}");
     },
     toObject(v) {
-      return JSON.parse(v)
+      return JSON.parse(v);
     },
-    formatText: v => abbr(v, 60),
+    formatText: (v) => abbr(v, 60),
     eval_value(value) {
-      return Array.from(value)
+      return Array.from(value);
     },
     isTokenField(value) {
-      return value ? isToken(value) : false
+      return value ? isToken(value) : false;
     },
     isHex(value) {
-      return value ? isHexAddress(value) : false
+      return value ? isHexAddress(value) : false;
     },
     formatHexAddress(v) {
-      return getStakingValidatorByHex(this.$http.config.chain_name, v)
+      return getStakingValidatorByHex(this.$http.config.chain_name, v);
     },
     isArrayText(value) {
-      return value ? isStringArray(value) : false
+      return value ? isStringArray(value) : false;
     },
     formatTokens(value) {
-      return tokenFormatter(value)
+      return tokenFormatter(value);
     },
     addNewLine(value) {
-      const percentage = /^0\.\d+/
+      const percentage = /^0\.\d+/;
       if (percentage.test(value)) {
-        return `${percent(value)}%`
+        return `${percent(value)}%`;
       }
-      return value ? value.replace(/(?:\\[rn])+/g, '\n') : '-'
+      return value ? value.replace(/(?:\\[rn])+/g, "\n") : "-";
     },
   },
-}
+};
 </script>
 
-<style lang='css' scoped>
+<style lang="css" scoped>
 @media (min-width: 768px) {
-  td:first-child { width: 20% ;}
+  td:first-child {
+    width: 20%;
+  }
 }
 </style>

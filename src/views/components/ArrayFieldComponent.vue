@@ -2,7 +2,7 @@
   <b-table
     v-if="Array.isArray(items)"
     :items="items"
-    :sticky-header="true"
+    :sticky-header="false"
     :no-border-collapse="true"
     responsive="md"
     class="ml-0 mr-0 dataview text-nowrap"
@@ -90,30 +90,30 @@ export default {
 </script>
 <style lang='css' scoped>
 /* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) {
+/* @media (min-width: 576px) {
   .dataview {
     max-width: 300px;
   }
-}
+} */
 
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   .dataview {
     max-width: 500px;
   }
-}
+} */
 
 /* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
+/* @media (min-width: 992px) {
   .dataview {
     max-width: 700px;
   }
-}
+} */
 
 /* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
   .dataview {
     max-width: 820px;
   }
-}
+} */
 </style>
