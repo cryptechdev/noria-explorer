@@ -1,5 +1,5 @@
 {
-  "chain_name": "Noria Testnet",
+  "chain_name": "noria",
   "api": ["https://chaos-lcd.cryptodollar.dev"],
   "rpc": ["https://chaos-rpc.cryptodollar.dev:443"],
   "sdk_version": "0.45.4",
