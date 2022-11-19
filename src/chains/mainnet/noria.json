@@ -1,16 +1,19 @@
 {
-    "chain_name": "noria",
-    "api":["https://chaos-lcd.cryptodollar.dev"],
-    "rpc":["https://chaos-rpc.cryptodollar.dev:443"],
-    "sdk_version": "0.45.4",
-    "addr_prefix": "noria",
-    "logo": "/logo.svg",
-    "coin_type": "118",
-    "min_tx_fee": "100",
-    "assets": [{
-        "base": "unoria",
-        "symbol": "NORIA",
-        "exponent": "6",
-        "logo": "/logo.svg"
-    }]
+  "chain_name": "Noria Testnet",
+  "api": ["https://chaos-lcd.cryptodollar.dev"],
+  "rpc": ["https://chaos-rpc.cryptodollar.dev:443"],
+  "sdk_version": "0.45.4",
+  "addr_prefix": "noria",
+  "logo": "/logo.svg",
+  "coin_type": "118",
+  "min_tx_fee": "100",
+  "assets": [
+    {
+      "base": "unoria",
+      "symbol": "NORIA",
+      "exponent": "6",
+      "logo": "/logo.svg"
+    }
+  ],
+  "keplr_features": ["stargate", "ibc-transfer"]
 }
