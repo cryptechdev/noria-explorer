@@ -653,7 +653,13 @@ export default {
       this.account = acc.account
       this.initial()
       this.$http.getTxsBySender(this.address).then(res => {
+        if (res.length > 0 ) {
         this.transactions = res
+        } else {
+          this.$http.getTxsByContract(this.address).then(res => {
+            this.transactions = res
+          })
+        }
       })
       this.$http.getStakingParameters().then(res => {
         this.stakingParameters = res

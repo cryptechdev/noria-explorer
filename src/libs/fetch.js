@@ -109,6 +109,10 @@ export default class ChainFetch {
     return this.get(`/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&pagination.reverse=true&order_by=ORDER_BY_DESC`)
   }
 
+  async getTxsByContract(sender) {
+    return this.get(`/cosmos/tx/v1beta1/txs?events=wasm._contract_address='${sender}'&pagination.reverse=true&order_by=ORDER_BY_DESC`)
+  }
+
   async getTxsByRecipient(recipient) {
     return this.get(`/cosmos/tx/v1beta1/txs?message.recipient=${recipient}`)
   }
