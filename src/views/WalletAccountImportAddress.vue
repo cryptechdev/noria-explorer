@@ -1,15 +1,13 @@
 <template>
   <div>
-    <b-alert
-      variant="danger"
-      :show="true"
-      dismissible
-    >
-      <h4 class="alert-heading">
-        DISCLAIMER:
-      </h4>
+    <b-alert variant="danger" :show="true" dismissible>
+      <h4 class="alert-heading">DISCLAIMER:</h4>
       <div class="alert-body">
-        <span>Ping.pub is maintained by the community, Everyone could add a chain to ping.pub. Some of those blockchains are not fully tested, Use at your own risk.</span>
+        <span
+          >Ping.pub is maintained by the community, Everyone could add a chain
+          to ping.pub. Some of those blockchains are not fully tested, Use at
+          your own risk.</span
+        >
       </div>
     </b-alert>
     <form-wizard
@@ -24,14 +22,8 @@
       @on-complete="formSubmitted"
     >
       <!-- Device tab -->
-      <tab-content
-        title="Device"
-        :before-change="validationFormDevice"
-      >
-        <validation-observer
-          ref="deviceRules"
-          tag="form"
-        >
+      <tab-content title="Device" :before-change="validationFormDevice">
+        <validation-observer ref="deviceRules" tag="form">
           <b-row>
             <b-col md="12">
               <b-form-group
@@ -43,11 +35,7 @@
                   name="device"
                   rules="required"
                 >
-                  <b-form-radio-group
-                    v-model="device"
-                    stacked
-                  >
-
+                  <b-form-radio-group v-model="device" stacked>
                     <b-form-radio
                       v-model="device"
                       name="device"
@@ -100,14 +88,8 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col
-              v-if="device.startsWith('ledger')"
-              md="12"
-            >
-              <b-form-group
-                label="HD Path"
-                label-for="hdpath"
-              >
+            <b-col v-if="device.startsWith('ledger')" md="12">
+              <b-form-group label="HD Path" label-for="hdpath">
                 <validation-provider
                   #default="{ errors }"
                   name="HD Path"
@@ -128,20 +110,11 @@
       </tab-content>
 
       <!-- address  -->
-      <tab-content
-        title="Accounts"
-        :before-change="validationFormAddress"
-      >
-        <validation-observer
-          ref="accountRules"
-          tag="form"
-        >
+      <tab-content title="Accounts" :before-change="validationFormAddress">
+        <validation-observer ref="accountRules" tag="form">
           <b-row>
             <b-col md="12">
-              <b-form-group
-                label="Account Name"
-                label-for="account_name"
-              >
+              <b-form-group label="Account Name" label-for="account_name">
                 <validation-provider
                   #default="{ errors }"
                   name="Account Name"
@@ -150,7 +123,7 @@
                   <b-form-input
                     id="account_name"
                     v-model="name"
-                    :state="errors.length > 0 ? false:null"
+                    :state="errors.length > 0 ? false : null"
                     placeholder="Ping Nano X"
                     :readonly="edit"
                   />
@@ -158,29 +131,13 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col
-              v-if="hdpath"
-              md="12"
-            >
-              <b-form-group
-                label="HD Path"
-                label-for="ir"
-              >
-                <b-form-input
-                  id="ir"
-                  :value="hdpath"
-                  readonly
-                />
+            <b-col v-if="hdpath" md="12">
+              <b-form-group label="HD Path" label-for="ir">
+                <b-form-input id="ir" :value="hdpath" readonly />
               </b-form-group>
             </b-col>
-            <b-col
-              v-if="accounts"
-              md="12"
-            >
-              <b-form-group
-                label="Public Key"
-                label-for="ir"
-              >
+            <b-col v-if="accounts" md="12">
+              <b-form-group label="Public Key" label-for="ir">
                 <validation-provider
                   #default="{ errors }"
                   name="Public Key"
@@ -190,16 +147,14 @@
                     id="ir"
                     :value="formatPubkey(accounts.pubkey)"
                     readonly
-                    :state="errors.length > 0 ? false:null"
+                    :state="errors.length > 0 ? false : null"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
             <b-col md="12">
-              <b-form-group
-                label="Derivate Address For Chains:"
-              >
+              <b-form-group label="Derivate Address For Chains:">
                 <validation-provider
                   #default="{ errors }"
                   name="addrs"
@@ -208,7 +163,7 @@
                   <div class="demo-inline-spacing text-uppercase">
                     <b-row>
                       <b-col
-                        v-for="item, key in chains"
+                        v-for="(item, key) in chains"
                         :key="key"
                         xs="12"
                         md="4"
@@ -229,8 +184,14 @@
                           <span
                             v-b-tooltip.hover.v-primary
                             :title="`Coin Type: ${item.coin_type}`"
-                            :class="hdpath.startsWith(`m/44'/${item.coin_type}`)?'text-success':'text-danger'"
-                          > {{ item.chain_name }}</span>
+                            :class="
+                              hdpath.startsWith(`m/44'/${item.coin_type}`)
+                                ? 'text-success'
+                                : 'text-danger'
+                            "
+                          >
+                            {{ item.chain_name }}</span
+                          >
                         </b-form-checkbox>
                       </b-col>
                     </b-row>
@@ -238,16 +199,14 @@
                   <small class="text-success">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
-              <b-alert
-                show
-                variant="info"
-              >
-                <div class="alert-heading">
-                  IMPORTANT
-                </div>
+              <b-alert show variant="info">
+                <div class="alert-heading">IMPORTANT</div>
                 <div class="alert-body">
                   <div>
-                    If you don't have Ledger, Do not import those addresses in <b class="text-danger">RED</b>. Because these addresses are derived from different coin_type which is not as same as the official one
+                    If you don't have Ledger, Do not import those addresses in
+                    <b class="text-danger">RED</b>. Because these addresses are
+                    derived from different coin_type which is not as same as the
+                    official one
                   </div>
                 </div>
               </b-alert>
@@ -256,26 +215,16 @@
         </validation-observer>
       </tab-content>
 
-      <tab-content
-        title="Confirmation"
-      >
+      <tab-content title="Confirmation">
         <div class="d-flex border-bottom mb-2">
-          <feather-icon
-            icon="UserIcon"
-            size="19"
-            class="mb-50"
-          />
+          <feather-icon icon="UserIcon" size="19" class="mb-50" />
           <h4 class="mb-0 ml-50">
             {{ name }} <small> {{ hdpath }}</small>
           </h4>
         </div>
 
         <b-row class="mb-2">
-          <b-col
-            v-for="i in addresses"
-            :key="i.addr"
-            cols="12"
-          >
+          <b-col v-for="i in addresses" :key="i.addr" cols="12">
             <b-input-group class="mb-25">
               <b-input-group-prepend is-text>
                 <b-avatar
@@ -292,44 +241,30 @@
       </tab-content>
     </form-wizard>
 
-    <b-alert
-      variant="secondary"
-      :show="!accounts && device === 'keplr'"
-    >
-      <h4 class="alert-heading">
-        Enable Keplr For {{ chainId }}
-      </h4>
+    <b-alert variant="secondary" :show="!accounts && device === 'keplr'">
+      <h4 class="alert-heading">Enable Keplr For {{ chainId }}</h4>
       <div class="alert-body p-1">
-        <span>If Keplr has not added <code>{{ chainId }}</code>, We can enable it here.</span>
-        <b-form-textarea
-          :value="keplr"
-          rows="10"
-          class="mt-1 mb-1"
-        />
-        <div
-          v-if="error"
-          class="text-danger"
+        <span
+          >If Keplr has not added <code>{{ chainId }}</code
+          >, We can enable it here.</span
         >
+        <b-form-textarea :value="ChainInfo" rows="10" class="mt-1 mb-1" />
+        <div v-if="error" class="text-danger">
           {{ error }}
         </div>
-        <b-button
-          variant="primary"
-          @click="suggest()"
-        >
-          Enable Keplr
-        </b-button>
+        <b-button variant="primary" @click="suggest()"> Enable Keplr </b-button>
       </div>
     </b-alert>
   </div>
 </template>
 
 <script>
-import { FormWizard, TabContent } from 'vue-form-wizard'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { FormWizard, TabContent } from "vue-form-wizard";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 // import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-import MetaMaskSigner from '@/libs/client/MetaMaskSigner'
+import "vue-form-wizard/dist/vue-form-wizard.min.css";
+import MetaMaskSigner from "@/libs/client/MetaMaskSigner";
 import {
   BAlert,
   BRow,
@@ -345,13 +280,17 @@ import {
   VBTooltip,
   BFormTextarea,
   BButton,
-} from 'bootstrap-vue'
-import { required } from '@validations'
+} from "bootstrap-vue";
+import { required } from "@validations";
 import {
-  addressDecode, addressEnCode, getLedgerAddress, getLocalAccounts,
-} from '@/libs/utils'
-import { toHex } from '@cosmjs/encoding'
-import { stringToPath } from '@cosmjs/crypto'
+  addressDecode,
+  addressEnCode,
+  getLedgerAddress,
+  getLocalAccounts,
+} from "@/libs/utils";
+import { toHex } from "@cosmjs/encoding";
+import { stringToPath } from "@cosmjs/crypto";
+import ChainInfo from "@/chains/testnet/chainInfo";
 
 export default {
   components: {
@@ -376,279 +315,307 @@ export default {
     ToastificationContent,
   },
   directives: {
-    'b-tooltip': VBTooltip,
+    "b-tooltip": VBTooltip,
   },
   data() {
     return {
-      debug: '',
-      device: 'keplr',
-      address: '',
+      ChainInfo: JSON.stringify(ChainInfo, null, 2),
+      debug: "",
+      device: "keplr",
+      address: "",
       hdpath: "m/44'/118/0'/0/0",
-      name: '',
+      name: "",
       options: {},
       required,
       selected: [],
       accounts: null,
       exludes: [], // HD Path is NOT supported,
       edit: false,
-      keplr: '',
-      chainId: '',
+      keplr: "",
+      chainId: "",
       error: null,
-    }
+    };
   },
   computed: {
     chains() {
-      const config = JSON.parse(localStorage.getItem('chains'))
+      const config = JSON.parse(localStorage.getItem("chains"));
 
-      this.exludes.forEach(x => {
-        delete config[x]
-      })
-      return config
+      this.exludes.forEach((x) => {
+        delete config[x];
+      });
+      return config;
     },
     addresses() {
       if (this.accounts && this.accounts.address) {
-        const { data } = addressDecode(this.accounts.address)
-        return this.selected.map(x => {
-          if (this.chains[x]) {
-            const { logo, addr_prefix, coin_type } = this.chains[x]
-            const addr = addressEnCode(addr_prefix, data, coin_type)
-            return {
-              chain: x, addr, logo, hdpath: this.hdpath,
+        const { data } = addressDecode(this.accounts.address);
+        return this.selected
+          .map((x) => {
+            if (this.chains[x]) {
+              const { logo, addr_prefix, coin_type } = this.chains[x];
+              const addr = addressEnCode(addr_prefix, data, coin_type);
+              return {
+                chain: x,
+                addr,
+                logo,
+                hdpath: this.hdpath,
+              };
             }
-          }
-          return null
-        }).filter(x => x != null)
+            return null;
+          })
+          .filter((x) => x != null);
       }
-      return []
+      return [];
     },
   },
   mounted() {
-    const { selected } = this.$store.state.chains
+    const { selected } = this.$store.state.chains;
     // this.chain = selected
-    this.$http.getLatestBlock().then(res => {
-      this.chainId = res.block.header.chain_id
-      this.keplr = this.initParamsForKeplr(this.chainId, selected)
-    })
-    if (selected && selected.chain_name && !this.exludes.includes(selected.chain_name)) {
-      this.selected.push(selected.chain_name)
+    this.$http.getLatestBlock().then((res) => {
+      this.chainId = res.block.header.chain_id;
+      this.keplr = this.initParamsForKeplr(this.chainId, selected);
+    });
+    if (
+      selected &&
+      selected.chain_name &&
+      !this.exludes.includes(selected.chain_name)
+    ) {
+      this.selected.push(selected.chain_name);
     }
-    const name = new URLSearchParams(window.location.search).get('name')
-    const wallets = getLocalAccounts()
+    const name = new URLSearchParams(window.location.search).get("name");
+    const wallets = getLocalAccounts();
     if (name && wallets && wallets[name]) {
-      const wallet = wallets[name]
-      this.device = wallet.device
-      this.name = wallet.name
-      this.edit = true
+      const wallet = wallets[name];
+      this.device = wallet.device;
+      this.name = wallet.name;
+      this.edit = true;
       if (wallet.address) {
-        wallet.address.forEach(a => {
+        wallet.address.forEach((a) => {
           if (!this.selected.includes(a.chain)) {
-            this.selected.push(a.chain)
+            this.selected.push(a.chain);
           }
-        })
-        this.address = wallet.address[0].addr
-        this.hdpath = wallet.address[0].hdpath
+        });
+        this.address = wallet.address[0].addr;
+        this.hdpath = wallet.address[0].hdpath;
         if (this.localAddress()) {
-          this.$refs.wizard.nextTab()
+          this.$refs.wizard.nextTab();
         }
       }
     } else {
-      this.hdpath = `m/44'/${selected.coin_type}/0'/0/0`
+      this.hdpath = `m/44'/${selected.coin_type}/0'/0/0`;
     }
   },
   methods: {
     suggest() {
       if (window.keplr) {
-        window.keplr.experimentalSuggestChain(JSON.parse(this.keplr)).catch(e => {
-          this.error = e
-        })
+        window.keplr
+          .experimentalSuggestChain(ChainInfo)
+          .catch((e) => {
+            this.error = e;
+            console.error(e);
+          });
       }
     },
     initParamsForKeplr(chainid, chain) {
-      return JSON.stringify({
-        chainId: chainid,
-        chainName: chain.chain_name,
-        rpc: Array.isArray(chain.rpc) ? chain.rpc[0] : chain.rpc,
-        rest: Array.isArray(chain.api) ? chain.api[0] : chain.api,
-        bip44: {
+      return JSON.stringify(
+        {
+          chainId: chainid,
+          chainName: chain.chain_name,
+          rpc: Array.isArray(chain.rpc) ? chain.rpc[0] : chain.rpc,
+          rest: Array.isArray(chain.api) ? chain.api[0] : chain.api,
+          bip44: {
+            coinType: chain.coin_type,
+          },
           coinType: chain.coin_type,
-        },
-        coinType: chain.coin_type,
-        bech32Config: {
-          bech32PrefixAccAddr: chain.addr_prefix,
-          bech32PrefixAccPub: `${chain.addr_prefix}pub`,
-          bech32PrefixValAddr: `${chain.addr_prefix}valoper`,
-          bech32PrefixValPub: `${chain.addr_prefix}valoperpub`,
-          bech32PrefixConsAddr: `${chain.addr_prefix}valcons`,
-          bech32PrefixConsPub: `${chain.addr_prefix}valconspub`,
-        },
-        currencies: [
-          {
+          walletUrlForStaking: chain.staking_url,
+          bech32Config: {
+            bech32PrefixAccAddr: chain.addr_prefix,
+            bech32PrefixAccPub: `${chain.addr_prefix}pub`,
+            bech32PrefixValAddr: `${chain.addr_prefix}valoper`,
+            bech32PrefixValPub: `${chain.addr_prefix}valoperpub`,
+            bech32PrefixConsAddr: `${chain.addr_prefix}valcons`,
+            bech32PrefixConsPub: `${chain.addr_prefix}valconspub`,
+          },
+          currencies: [
+            {
+              coinDenom: chain.assets[0].symbol,
+              coinMinimalDenom: chain.assets[0].base,
+              coinDecimals: Number(chain.assets[0].exponent),
+              coinGeckoId: chain.assets[0].coingecko_id || "unknown",
+            },
+          ],
+          feeCurrencies: [
+            {
+              coinDenom: chain.assets[0].symbol,
+              coinMinimalDenom: chain.assets[0].base,
+              coinDecimals: Number(chain.assets[0].exponent),
+              coinGeckoId: chain.assets[0].coingecko_id || "unknown",
+
+              gasPriceStep: {
+                low: 0.001,
+                average: 0.0025,
+                high: 0.003,
+              },
+            },
+          ],
+          stakeCurrency: {
             coinDenom: chain.assets[0].symbol,
             coinMinimalDenom: chain.assets[0].base,
-            coinDecimals: chain.assets[0].exponent,
-            coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
+            coinDecimals: Number(chain.assets[0].exponent),
+            coinGeckoId: chain.assets[0].coingecko_id || "unknown",
           },
-        ],
-        feeCurrencies: [
-          {
-            coinDenom: chain.assets[0].symbol,
-            coinMinimalDenom: chain.assets[0].base,
-            coinDecimals: chain.assets[0].exponent,
-            coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
-          },
-        ],
-        stakeCurrency: {
-          coinDenom: chain.assets[0].symbol,
-          coinMinimalDenom: chain.assets[0].base,
-          coinDecimals: chain.assets[0].exponent,
-          coinGeckoId: chain.assets[0].coingecko_id || 'unknown',
+          features: chain.keplr_features || [],
         },
-        gasPriceStep: {
-          low: 0.01,
-          average: 0.025,
-          high: 0.03,
-        },
-        features: chain.keplr_features || [],
-      }, null, '\t')
+        null,
+        "\t"
+      );
     },
     formatPubkey(v) {
-      if (typeof (v) === 'string') {
-        return v
+      if (typeof v === "string") {
+        return v;
       }
       if (v) {
-        return toHex(v)
+        return toHex(v);
       }
-      return ''
+      return "";
     },
     async connect() {
-      const transport = this.device === 'ledger' ? 'usb' : 'bluetooth'
-      return getLedgerAddress(transport, this.hdpath)
+      const transport = this.device === "ledger" ? "usb" : "bluetooth";
+      return getLedgerAddress(transport, this.hdpath);
     },
     async cennectKeplr() {
       if (!window.getOfflineSigner || !window.keplr) {
-        this.debug = 'Please install keplr extension'
-        return null
+        this.debug = "Please install keplr extension";
+        return null;
       }
       // const chainId = 'cosmoshub'
-      const chainId = await this.$http.getLatestBlock().then(ret => ret.block.header.chain_id)
-      await window.keplr.enable(chainId)
-      const offlineSigner = window.getOfflineSigner(chainId)
-      return offlineSigner.getAccounts()
+      const chainId = await this.$http
+        .getLatestBlock()
+        .then((ret) => ret.block.header.chain_id);
+      await window.keplr.enable(chainId);
+      const offlineSigner = window.getOfflineSigner(chainId);
+      return offlineSigner.getAccounts();
     },
     async connectMetamask() {
       if (!window.ethereum) {
-        this.debug = 'Please install Metamask extension'
-        return null
+        this.debug = "Please install Metamask extension";
+        return null;
       }
-      const signer = MetaMaskSigner.create(stringToPath(this.hdpath))
-      return signer.getAccounts()
+      const signer = MetaMaskSigner.create(stringToPath(this.hdpath));
+      return signer.getAccounts();
     },
     localAddress() {
-      if (!this.address) return false
+      if (!this.address) return false;
       try {
-        const { data } = addressDecode(this.address)
+        const { data } = addressDecode(this.address);
         if (data) {
           this.accounts = {
             address: this.address,
             pubkey: data,
-          }
-          return true
+          };
+          return true;
         }
-      } catch (e) { this.debug = e }
-      return false
+      } catch (e) {
+        this.debug = e;
+      }
+      return false;
     },
     formSubmitted() {
-      const string = localStorage.getItem('accounts')
-      const accounts = string ? JSON.parse(string) : {}
+      const string = localStorage.getItem("accounts");
+      const accounts = string ? JSON.parse(string) : {};
 
       accounts[this.name] = {
         name: this.name,
         device: this.device,
         address: this.addresses,
-      }
-      localStorage.setItem('accounts', JSON.stringify(accounts))
+      };
+      localStorage.setItem("accounts", JSON.stringify(accounts));
       if (!this.$store.state.chains.defaultWallet) {
-        this.$store.commit('setDefaultWallet', this.name)
+        this.$store.commit("setDefaultWallet", this.name);
       }
 
       this.$toast({
         component: ToastificationContent,
         props: {
-          title: 'Address Saved!',
-          icon: 'EditIcon',
-          variant: 'success',
+          title: "Address Saved!",
+          icon: "EditIcon",
+          variant: "success",
         },
-      })
+      });
 
-      this.$router.push('./accounts')
+      this.$router.push("./accounts");
     },
     async validationFormDevice() {
-      let ok = String(this.name).length > 0
+      let ok = String(this.name).length > 0;
 
-      if (!ok) { // new import, otherwise it's edit mode.
+      if (!ok) {
+        // new import, otherwise it's edit mode.
         switch (this.device) {
-          case 'keplr':
-            await this.cennectKeplr().then(accounts => {
+          case "keplr":
+            await this.cennectKeplr().then((accounts) => {
               if (accounts) {
-              // eslint-disable-next-line prefer-destructuring
-                this.accounts = accounts[0]
-                ok = true
+                // eslint-disable-next-line prefer-destructuring
+                this.accounts = accounts[0];
+                ok = true;
               }
-            })
-            break
-          case 'metamask':
-            await this.connectMetamask().then(accounts => {
-              if (accounts) {
-              // eslint-disable-next-line prefer-destructuring
-                this.accounts = accounts[0]
-                ok = true
-              }
-            }).catch(e => {
-              this.debug = e
-            })
-            break
-          case 'ledger':
-          case 'ledger2':
-            await this.connect().then(accounts => {
-              if (accounts) {
-              // eslint-disable-next-line prefer-destructuring
-                this.accounts = accounts[0]
-                ok = true
-              }
-            }).catch(e => {
-              this.debug = e
-            })
-            break
+            });
+            break;
+          case "metamask":
+            await this.connectMetamask()
+              .then((accounts) => {
+                if (accounts) {
+                  // eslint-disable-next-line prefer-destructuring
+                  this.accounts = accounts[0];
+                  ok = true;
+                }
+              })
+              .catch((e) => {
+                this.debug = e;
+              });
+            break;
+          case "ledger":
+          case "ledger2":
+            await this.connect()
+              .then((accounts) => {
+                if (accounts) {
+                  // eslint-disable-next-line prefer-destructuring
+                  this.accounts = accounts[0];
+                  ok = true;
+                }
+              })
+              .catch((e) => {
+                this.debug = e;
+              });
+            break;
           default:
-            ok = this.localAddress()
+            ok = this.localAddress();
         }
       }
 
       return new Promise((resolve, reject) => {
-        this.$refs.deviceRules.validate().then(success => {
+        this.$refs.deviceRules.validate().then((success) => {
           if (ok && success) {
-            resolve(true)
+            resolve(true);
           }
-          reject()
-        })
-      })
+          reject();
+        });
+      });
     },
     validationFormAddress() {
       return new Promise((resolve, reject) => {
-        this.$refs.accountRules.validate().then(success => {
+        this.$refs.accountRules.validate().then((success) => {
           if (success) {
-            resolve(true)
+            resolve(true);
           } else {
-            reject()
+            reject();
           }
-        })
-      })
+        });
+      });
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
-  // @import '@core/assets/fonts/feather/iconfont.css';
-  @import '@core/scss/vue/libs/vue-wizard.scss';
+// @import '@core/assets/fonts/feather/iconfont.css';
+@import "@core/scss/vue/libs/vue-wizard.scss";
 </style>
