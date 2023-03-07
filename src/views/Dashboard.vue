@@ -242,7 +242,7 @@
                 </b-button-group>
               </template>
             </b-table>
-            <b-card-footer class="text-right">
+            <!-- <b-card-footer class="text-right">
               <b-button
                 v-b-modal.operation-modal
                 variant="outline-primary"
@@ -251,7 +251,7 @@
                 <feather-icon icon="AwardIcon" />
                 Widthdraw Rewards
               </b-button>
-            </b-card-footer>
+            </b-card-footer> -->
           </b-card>
         </b-col>
       </b-row>

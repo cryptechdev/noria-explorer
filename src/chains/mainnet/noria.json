@@ -7,13 +7,20 @@
   "logo": "/logo.svg",
   "coin_type": "118",
   "min_tx_fee": "100",
+  "staking_url": "https://app.noria.network/noria/staking",
   "assets": [
     {
       "base": "unoria",
       "symbol": "NORIA",
       "exponent": "6",
       "logo": "/logo.svg"
+    },
+    {
+      "base": "ucrd",
+      "symbol": "CRD",
+      "exponent": "6",
+      "logo": "/logo.svg"
     }
   ],
-  "keplr_features": ["stargate", "ibc-transfer"]
+  "keplr_features": ["cosmwasm", "ibc-transfer"]
 }
