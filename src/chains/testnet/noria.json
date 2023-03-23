@@ -1,12 +1,10 @@
 {
   "chain_name": "noria",
   "api": [
-    "https://archive-lcd.noria.nextnet.zone",
-    "https://chaos-lcd.cryptodollar.dev"
+    "https://archive-lcd.noria.nextnet.zone"
   ],
   "rpc": [
-    "https://archive-rpc.noria.nextnet.zone:443",
-    "https://chaos-rpc.cryptodollar.dev:443"
+    "https://archive-rpc.noria.nextnet.zone:443"
   ],
   "sdk_version": "0.45.12",
   "addr_prefix": "noria",

@@ -1,10 +1,10 @@
 const prefix = "noria";
 
 export default {
-  chainId: "oasis-2",
+  chainId: "oasis-3",
   chainName: "Noria Testnet",
-  rpc: "https://chaos-rpc.cryptodollar.dev",
-  rest: "https://chaos-lcd.cryptodollar.dev",
+  rpc: "https://archive-rpc.noria.nextnet.zone",
+  rest: "https://archive-lcd.noria.nextnet.zone",
   walletUrlForStaking: "https://app.noria.network/noria/staking",
   bip44: {
     coinType: 118,
@@ -31,11 +31,6 @@ export default {
     },
   ],
   feeCurrencies: [
-    {
-      coinDenom: "NORIA",
-      coinMinimalDenom: "unoria",
-      coinDecimals: 6,
-    },
     {
       coinDenom: "CRD",
       coinMinimalDenom: "ucrd",
