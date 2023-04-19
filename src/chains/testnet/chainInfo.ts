@@ -35,6 +35,11 @@ export default {
       coinDenom: "CRD",
       coinMinimalDenom: "ucrd",
       coinDecimals: 6,
+      gasPriceStep: {
+        low: 0.0005,
+        average: 0.0025,
+        high: 0.005,
+      },
     },
   ],
   stakeCurrency: {
@@ -44,10 +49,5 @@ export default {
     coinGeckoId: prefix,
   },
   coinType: 118,
-  gasPriceStep: {
-    low: 0.0005,
-    average: 0.0025,
-    high: 0.005,
-  },
   features: ["cosmwasm", "ibc-transfer"],
 };
