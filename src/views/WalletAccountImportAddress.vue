@@ -1,15 +1,5 @@
 <template>
   <div>
-    <b-alert variant="danger" :show="true" dismissible>
-      <h4 class="alert-heading">DISCLAIMER:</h4>
-      <div class="alert-body">
-        <span
-          >Ping.pub is maintained by the community, Everyone could add a chain
-          to ping.pub. Some of those blockchains are not fully tested, Use at
-          your own risk.</span
-        >
-      </div>
-    </b-alert>
     <form-wizard
       ref="wizard"
       color="#7367F0"
@@ -248,7 +238,11 @@
           >If Keplr has not added <code>{{ chainId }}</code
           >, We can enable it here.</span
         >
-        <b-form-textarea :value="ChainInfo" rows="10" class="mt-1 mb-1" />
+        <b-form-textarea
+          :value="JSON.stringify(keplr, null, '\t')"
+          rows="10"
+          class="mt-1 mb-1"
+        />
         <div v-if="error" class="text-danger">
           {{ error }}
         </div>
@@ -290,7 +284,6 @@ import {
 } from "@/libs/utils";
 import { toHex } from "@cosmjs/encoding";
 import { stringToPath } from "@cosmjs/crypto";
-import ChainInfo from "@/chains/testnet/chainInfo";
 
 export default {
   components: {
@@ -319,7 +312,6 @@ export default {
   },
   data() {
     return {
-      ChainInfo: JSON.stringify(ChainInfo, null, 2),
       debug: "",
       device: "keplr",
       address: "",
@@ -331,12 +323,17 @@ export default {
       accounts: null,
       exludes: [], // HD Path is NOT supported,
       edit: false,
-      keplr: "",
       chainId: "",
       error: null,
     };
   },
   computed: {
+    keplr() {
+      const data = this.$store.getters["chains/getKeplrConfig"];
+      console.log("keplr", data);
+
+      return data;
+    },
     chains() {
       const config = JSON.parse(localStorage.getItem("chains"));
 
@@ -367,12 +364,14 @@ export default {
       return [];
     },
   },
+  created() {
+    this.$store.dispatch("chains/getKeplrConfig");
+  },
   mounted() {
     const { selected } = this.$store.state.chains;
     // this.chain = selected
     this.$http.getLatestBlock().then((res) => {
       this.chainId = res.block.header.chain_id;
-      this.keplr = this.initParamsForKeplr(this.chainId, selected);
     });
     if (
       selected &&
@@ -407,67 +406,11 @@ export default {
   methods: {
     suggest() {
       if (window.keplr) {
-        window.keplr
-          .experimentalSuggestChain(ChainInfo)
-          .catch((e) => {
-            this.error = e;
-            console.error(e);
-          });
+        window.keplr.experimentalSuggestChain(this.keplr).catch((e) => {
+          this.error = e;
+          console.error(e);
+        });
       }
-    },
-    initParamsForKeplr(chainid, chain) {
-      return JSON.stringify(
-        {
-          chainId: chainid,
-          chainName: chain.chain_name,
-          rpc: Array.isArray(chain.rpc) ? chain.rpc[0] : chain.rpc,
-          rest: Array.isArray(chain.api) ? chain.api[0] : chain.api,
-          bip44: {
-            coinType: chain.coin_type,
-          },
-          coinType: chain.coin_type,
-          walletUrlForStaking: chain.staking_url,
-          bech32Config: {
-            bech32PrefixAccAddr: chain.addr_prefix,
-            bech32PrefixAccPub: `${chain.addr_prefix}pub`,
-            bech32PrefixValAddr: `${chain.addr_prefix}valoper`,
-            bech32PrefixValPub: `${chain.addr_prefix}valoperpub`,
-            bech32PrefixConsAddr: `${chain.addr_prefix}valcons`,
-            bech32PrefixConsPub: `${chain.addr_prefix}valconspub`,
-          },
-          currencies: [
-            {
-              coinDenom: chain.assets[0].symbol,
-              coinMinimalDenom: chain.assets[0].base,
-              coinDecimals: Number(chain.assets[0].exponent),
-              coinGeckoId: chain.assets[0].coingecko_id || "unknown",
-            },
-          ],
-          feeCurrencies: [
-            {
-              coinDenom: chain.assets[0].symbol,
-              coinMinimalDenom: chain.assets[0].base,
-              coinDecimals: Number(chain.assets[0].exponent),
-              coinGeckoId: chain.assets[0].coingecko_id || "unknown",
-
-              gasPriceStep: {
-                low: 0.001,
-                average: 0.0025,
-                high: 0.003,
-              },
-            },
-          ],
-          stakeCurrency: {
-            coinDenom: chain.assets[0].symbol,
-            coinMinimalDenom: chain.assets[0].base,
-            coinDecimals: Number(chain.assets[0].exponent),
-            coinGeckoId: chain.assets[0].coingecko_id || "unknown",
-          },
-          features: chain.keplr_features || [],
-        },
-        null,
-        "\t"
-      );
     },
     formatPubkey(v) {
       if (typeof v === "string") {

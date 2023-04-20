@@ -13,7 +13,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      redirect: '/noria',
+      redirect: `/${process.env.VUE_APP_CHAIN_NAME}`,
     },
     {
       path: '/coffee',
