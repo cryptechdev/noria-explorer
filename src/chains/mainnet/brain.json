@@ -1,0 +1,26 @@
+{
+  "chain_name": "brain",
+  "api": ["https://neuron-lcd.cryptodollar.dev"],
+  "rpc": ["https://neuron-rpc.cryptodollar.dev"],
+  "sdk_version": "0.45.11",
+  "addr_prefix": "brain",
+  "logo": "https://denom-assets.sgp1.cdn.digitaloceanspaces.com/explorer-denom-logo.png",
+  "coin_type": "118",
+  "min_tx_fee": "100",
+  "staking_url": "https://brain.cryptodollar.dev/brain/staking",
+  "assets": [
+    {
+      "base": "ubrain",
+      "symbol": "BRAIN",
+      "exponent": "6",
+      "logo": "https://denom-assets.sgp1.cdn.digitaloceanspaces.com/explorer-denom-logo.png"
+    },
+    {
+      "base": "ucrd",
+      "symbol": "CRD",
+      "exponent": "6",
+      "logo": "https://denom-assets.sgp1.cdn.digitaloceanspaces.com/explorer-denom-logo.png"
+    }
+  ],
+  "keplr_features": ["cosmwasm", "ibc-transfer"]
+}

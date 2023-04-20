@@ -9,9 +9,9 @@ export const $themeBreakpoints = {};
 // APP CONFIG
 export const $themeConfig = {
   app: {
-    appName: "NORIA", // Will update name in navigation menu (Branding)
+    appName: process.env.VUE_APP_CHAIN_NAME.toUpperCase(), // Will update name in navigation menu (Branding)
     // eslint-disable-next-line global-require
-    appLogoImage: "/logo.svg", // Will update logo in navigation menu (Branding)
+    appLogoImage: process.env.VUE_APP_LOGO, // Will update logo in navigation menu (Branding)
   },
   layout: {
     isRTL: false,

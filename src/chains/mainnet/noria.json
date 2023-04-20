@@ -1,14 +1,10 @@
 {
   "chain_name": "noria",
-  "api": [
-    "https://archive-lcd.noria.nextnet.zone"
-  ],
-  "rpc": [
-    "https://archive-rpc.noria.nextnet.zone:443"
-  ],
+  "api": ["https://archive-lcd.noria.nextnet.zone"],
+  "rpc": ["https://archive-rpc.noria.nextnet.zone:443"],
   "sdk_version": "0.45.12",
   "addr_prefix": "noria",
-  "logo": "/logo.svg",
+  "logo": "https://noria-assets.sgp1.cdn.digitaloceanspaces.com/noria.svg",
   "coin_type": "118",
   "min_tx_fee": "100",
   "staking_url": "https://app.noria.network/noria/staking",
@@ -17,13 +13,13 @@
       "base": "unoria",
       "symbol": "NORIA",
       "exponent": "6",
-      "logo": "/logo.svg"
+      "logo": "https://noria-assets.sgp1.cdn.digitaloceanspaces.com/noria.svg"
     },
     {
       "base": "ucrd",
       "symbol": "CRD",
       "exponent": "6",
-      "logo": "/logo.svg"
+      "logo": "https://noria-assets.sgp1.cdn.digitaloceanspaces.com/denom.svg"
     }
   ],
   "keplr_features": ["cosmwasm", "ibc-transfer"]
