@@ -23,6 +23,26 @@
           <b-table :items="objToTable(contractInfo)"></b-table>
         </b-card-body>
       </b-card>
+      <b-card
+        v-if="isContract && contractQueries.length > 0"
+        title="Contract Queries"
+      >
+        <b-card-body class="pl-0 pt-0 pr-0">
+          <b-button
+            v-for="(q, index) in contractQueries"
+            :key="index"
+            variant="primary"
+            size="sm"
+            class="mr-25"
+            @click="setQuery(q)"
+          >
+            <feather-icon icon="SendIcon" class="d-md-none" /><small
+              class="d-none d-md-block"
+              >{{ q }}</small
+            >
+          </b-button>
+        </b-card-body>
+      </b-card>
       <b-card class="d-flex flex-row">
         <b-card-header class="pt-0 pl-0 pr-0">
           <b-card-title>Assets</b-card-title>
@@ -438,6 +458,43 @@
         <vue-qr :text="address" />
       </b-popover>
 
+      <b-modal
+        @ok="handleQuery"
+        id="query-modal"
+        size="lg"
+        title="Query"
+        modal-class="custom-transaction-modal"
+      >
+        <AceEditor
+          id="query-editor"
+          :value="query"
+          :model="queryPayload"
+          @init="editorInit"
+          lang="json"
+          theme="monokai"
+          width="100%"
+          height="300px"
+          :options="{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            fontSize: 16,
+            highlightActiveLine: true,
+            enableSnippets: false,
+            showLineNumbers: true,
+            tabSize: 4,
+            showPrintMargin: false,
+            showGutter: true,
+          }"
+        />
+
+        <b-alert class="mt-3" :show="queryError !== undefined" variant="danger">
+          <div class="alert-body">
+            <span>{{ queryError }}</span>
+          </div>
+        </b-alert>
+        <pre style="font-size: 1.2rem">{{ queryResult }}</pre>
+      </b-modal>
+
       <operation-modal
         :type="operationModalType"
         :address="address"
@@ -465,9 +522,11 @@
 </template>
 
 <script>
+import AceEditor from "vuejs-ace-editor";
 import { $themeColors } from "@themeConfig";
 import dayjs from "dayjs";
 import {
+  BAlert,
   BCard,
   BAvatar,
   BPopover,
@@ -510,10 +569,13 @@ import {
 import OperationModal from "@/views/components/OperationModal/index.vue";
 import ObjectFieldComponent from "./components/ObjectFieldComponent.vue";
 import ChartComponentDoughnut from "./components/charts/ChartComponentDoughnut.vue";
+import { chartColors } from "@/libs/utils";
 
 export default {
   components: {
+    AceEditor,
     BRow,
+    BAlert,
     BCol,
     BCard,
     BAvatar,
@@ -563,6 +625,10 @@ export default {
   data() {
     const { address } = this.$route.params;
     return {
+      queryResult: undefined,
+      queryError: undefined,
+      query: undefined,
+      queryPayload: {},
       TX_PER_PAGE: 10,
       currency: getUserCurrencySign(),
       selectedValidator: "",
@@ -587,6 +653,7 @@ export default {
       operationModalType: "",
       error: null,
       contractInfo: {},
+      contractQueries: [],
     };
   },
   computed: {
@@ -786,6 +853,36 @@ export default {
     });
   },
   methods: {
+    setQuery(q) {
+      this.queryResult = undefined;
+      this.queryError = undefined;
+      this.queryPayload = { [q]: {} };
+      this.query = JSON.stringify(this.queryPayload, null, 2);
+      this.$bvModal.show("query-modal");
+    },
+    async handleQuery(event) {
+      this.queryResult = undefined;
+      this.queryError = undefined;
+      event.preventDefault();
+      try {
+        const res = await this.$http.queryContract(
+          this.address,
+          this.queryPayload
+        );
+        if ("data" in res) {
+          this.queryResult = res.data;
+        } else {
+          this.queryError = res.message;
+        }
+      } catch (e) {
+        this.queryError = e;
+      }
+    },
+    editorInit: function () {
+      require("brace/ext/language_tools"); //language extension prerequsite...
+      require("brace/mode/json"); //language
+      require("brace/theme/monokai");
+    },
     objToTable(data) {
       return Object.keys(data).reduce((t, c) => {
         const th = t;
@@ -816,9 +913,12 @@ export default {
       } else {
         // get contract info
         this.$http.getContractInfo(this.address).then((res) => {
-          console.log("contract", res);
-
           this.contractInfo = res;
+        });
+
+        // probe for existing queries
+        this.$http.probeContractQueries(this.address).then((res) => {
+          this.contractQueries = res;
         });
       }
     },

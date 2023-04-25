@@ -153,7 +153,6 @@ export default class ChainFetch {
           `/cosmwasm/wasm/v1/contract/${address}/raw/Y29udHJhY3RfaW5mbw%3D%3D`
         ),
       ]);
-      console.log(responses);
       const decoded = JSON.parse(
         Buffer.from(responses[1].data, "base64").toString()
       );
@@ -163,6 +162,35 @@ export default class ChainFetch {
       console.log(e);
       return null;
     }
+  }
+
+  async queryContract(address, payload) {
+    const encoded = Buffer.from(JSON.stringify(payload)).toString("base64");
+    return this.get(`/cosmwasm/wasm/v1/contract/${address}/smart/${encoded}`);
+  }
+
+  async probeContractQueries(address) {
+    return this.get(
+      `/cosmwasm/wasm/v1/contract/${address}/smart/eyJyS2xRU0lNV0FlRFBHcFNpSnk0NCI6e319`
+    )
+      .then((res) => {
+        try {
+          if ("message" in res) {
+            const regex = /([`'"][a-zA-Z0-9_]+[`'"])/g;
+            const matches = res.message.split("expected")[1].match(regex);
+
+            return matches.map((a) => a.replace(/`/g, ""));
+          }
+          throw new Error("No message in response");
+        } catch (e) {
+          console.log(e);
+          return [];
+        }
+      })
+      .catch((e) => {
+        console.log(e.message);
+        return [];
+      });
   }
 
   async getTxsByRecipient(recipient) {
@@ -844,10 +872,7 @@ export default class ChainFetch {
         ? conf.api[this.getApiIndex(config)]
         : conf.api) + url;
     // finalurl = finalurl.replaceAll('v1beta1', this.getEndpointVersion())
-    const ret = await fetch(finalurl, {
-      method: "GET",
-      mode: "cors",
-    }).then((response) => response.json());
+    const ret = await fetch(finalurl).then((response) => response.json());
     return ret;
   }
 
