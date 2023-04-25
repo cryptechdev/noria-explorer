@@ -146,8 +146,23 @@ export default class ChainFetch {
   }
 
   async getContractInfo(address) {
-    const { contract_info } = await this.get(`/cosmwasm/wasm/v1/contract/${address}`);
-    return contract_info;
+    try {
+      const responses = await Promise.all([
+        this.get(`/cosmwasm/wasm/v1/contract/${address}`),
+        this.get(
+          `/cosmwasm/wasm/v1/contract/${address}/raw/Y29udHJhY3RfaW5mbw%3D%3D`
+        ),
+      ]);
+      console.log(responses);
+      const decoded = JSON.parse(
+        Buffer.from(responses[1].data, "base64").toString()
+      );
+
+      return { ...responses[0].contract_info, ...decoded };
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   }
 
   async getTxsByRecipient(recipient) {

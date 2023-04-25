@@ -18,7 +18,7 @@
         </div>
       </b-card>
 
-      <b-card v-if="isContract" title="Contract Info">
+      <b-card v-if="isContract && contractInfo !== null" title="Contract Info">
         <b-card-body class="pl-0 pt-0 pr-0">
           <b-table :items="objToTable(contractInfo)"></b-table>
         </b-card-body>
