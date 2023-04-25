@@ -7,6 +7,7 @@
             <feather-icon icon="CameraIcon" size="32" />
           </b-avatar>
           <div class="ml-2">
+            <div v-if="isContract" class="lead">{{ contractInfo.label }}</div>
             <h3 style="color: #fff" class="mb-0">
               Address:
               <feather-icon icon="CopyIcon" size="18" @click="copy()" />
@@ -15,6 +16,12 @@
             <span v-if="isEthAddr"> - {{ ethaddress() }}</span>
           </div>
         </div>
+      </b-card>
+
+      <b-card v-if="isContract" title="Contract Info">
+        <b-card-body class="pl-0 pt-0 pr-0">
+          <b-table :items="objToTable(contractInfo)"></b-table>
+        </b-card-body>
       </b-card>
       <b-card class="d-flex flex-row">
         <b-card-header class="pt-0 pl-0 pr-0">
@@ -579,6 +586,7 @@ export default {
       stakingParameters: {},
       operationModalType: "",
       error: null,
+      contractInfo: {},
     };
   },
   computed: {
@@ -778,6 +786,16 @@ export default {
     });
   },
   methods: {
+    objToTable(data) {
+      return Object.keys(data).reduce((t, c) => {
+        const th = t;
+        th.push({
+          key: c,
+          value: data[c],
+        });
+        return th;
+      }, []);
+    },
     setTransactions(data) {
       this.transactions = data;
     },
@@ -794,6 +812,13 @@ export default {
         });
         this.$http.getStakingUnbonding(this.address).then((res) => {
           this.unbonding = res.unbonding_responses || res;
+        });
+      } else {
+        // get contract info
+        this.$http.getContractInfo(this.address).then((res) => {
+          console.log("contract", res);
+
+          this.contractInfo = res;
         });
       }
     },

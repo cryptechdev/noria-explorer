@@ -145,6 +145,11 @@ export default class ChainFetch {
     );
   }
 
+  async getContractInfo(address) {
+    const { contract_info } = await this.get(`/cosmwasm/wasm/v1/contract/${address}`);
+    return contract_info;
+  }
+
   async getTxsByRecipient(recipient) {
     return this.get(`/cosmos/tx/v1beta1/txs?message.recipient=${recipient}`);
   }
@@ -824,7 +829,10 @@ export default class ChainFetch {
         ? conf.api[this.getApiIndex(config)]
         : conf.api) + url;
     // finalurl = finalurl.replaceAll('v1beta1', this.getEndpointVersion())
-    const ret = await fetch(finalurl).then((response) => response.json());
+    const ret = await fetch(finalurl, {
+      method: "GET",
+      mode: "cors",
+    }).then((response) => response.json());
     return ret;
   }
 

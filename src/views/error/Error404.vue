@@ -4,7 +4,7 @@
     <b-link class="brand-logo">
       <vuexy-logo />
       <h2 class="brand-text text-primary ml-1">
-        PING.PUB
+        {{ title }}
       </h2>
     </b-link>
 
@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       downImg: require('@/assets/images/pages/error.svg'),
+      title: process.env.VUE_APP_TITLE,
     }
   },
   computed: {
