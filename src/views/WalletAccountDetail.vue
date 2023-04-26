@@ -21,6 +21,10 @@
       <b-card v-if="isContract && contractInfo !== null" title="Contract Info">
         <b-card-body class="pl-0 pt-0 pr-0">
           <b-table :items="objToTable(contractInfo)"></b-table>
+          <div class="mt-3" v-if="initMsg">
+            <h5>Init Message</h5>
+            <pre style="font-size: 1rem" class="mt-1 p-1 mb-0 pb-0">{{ initMsg }}</pre>
+          </div>
         </b-card-body>
       </b-card>
       <b-card
@@ -33,7 +37,7 @@
             :key="index"
             variant="primary"
             size="sm"
-            class="mr-25"
+            class="mr-1 mt-1"
             @click="setQuery(q)"
           >
             <feather-icon icon="SendIcon" class="d-md-none" /><small
@@ -463,6 +467,8 @@
         id="query-modal"
         size="lg"
         title="Query"
+        ok-title="Query"
+        cancel-title="Close"
         modal-class="custom-transaction-modal"
       >
         <AceEditor
@@ -492,7 +498,12 @@
             <span>{{ queryError }}</span>
           </div>
         </b-alert>
-        <pre style="font-size: 1.2rem">{{ queryResult }}</pre>
+        <pre
+          v-if="queryResult !== undefined"
+          style="font-size: 1.2rem"
+          class="mt-1 p-1"
+          >{{ queryResult }}</pre
+        >
       </b-modal>
 
       <operation-modal
@@ -625,6 +636,7 @@ export default {
   data() {
     const { address } = this.$route.params;
     return {
+      initMsg: undefined,
       queryResult: undefined,
       queryError: undefined,
       query: undefined,
@@ -870,7 +882,7 @@ export default {
           this.queryPayload
         );
         if ("data" in res) {
-          this.queryResult = res.data;
+          this.queryResult = JSON.stringify(res.data, null, 4);
         } else {
           this.queryError = res.message;
         }
@@ -911,6 +923,11 @@ export default {
           this.unbonding = res.unbonding_responses || res;
         });
       } else {
+        // get contract init msg
+        this.$http.getContractInitMsg(this.address).then((res) => {
+          if (res !== undefined) this.initMsg = JSON.stringify(res, null, 4);
+        });
+
         // get contract info
         this.$http.getContractInfo(this.address).then((res) => {
           this.contractInfo = res;

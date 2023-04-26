@@ -164,6 +164,26 @@ export default class ChainFetch {
     }
   }
 
+  async getContractInitMsg(address) {
+    try {
+      const response = await this.get(
+        `/cosmwasm/wasm/v1/contract/${address}/history`
+      );
+      if ("entries" in response && response.entries.length > 0) {
+        const initEntry = response.entries.find(
+          (entry) =>
+            entry.operation === "CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT"
+        );
+        if (initEntry) return initEntry.msg;
+      }
+
+      return undefined;
+    } catch (e) {
+      console.log(e);
+      return undefined;
+    }
+  }
+
   async queryContract(address, payload) {
     const encoded = Buffer.from(JSON.stringify(payload)).toString("base64");
     return this.get(`/cosmwasm/wasm/v1/contract/${address}/smart/${encoded}`);
