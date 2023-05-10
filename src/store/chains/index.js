@@ -117,6 +117,8 @@ export default {
       _this.$http.getAllIBCDenoms().then((x) => {
         const denomsMap = {};
         const pathsMap = {};
+        if (!x || !x.denom_traces) return;
+        
         x.denom_traces.forEach((trace) => {
           const hash = toHex(
             sha256(

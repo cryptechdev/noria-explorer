@@ -6,7 +6,6 @@ import {
   createAuthzAminoConverters,
   createBankAminoConverters,
   createDistributionAminoConverters,
-  createFreegrantAminoConverters,
   createGovAminoConverters,
   createIbcAminoConverters,
   createStakingAminoConverters,
@@ -41,9 +40,8 @@ function createDefaultTypes(prefix: string): AminoConverters {
     ...createBankAminoConverters(),
     ...createDistributionAminoConverters(),
     ...createGovAminoConverters(),
-    ...createStakingAminoConverters(prefix),
+    ...createStakingAminoConverters(),
     ...createIbcAminoConverters(),
-    ...createFreegrantAminoConverters(),
     // ...createVestingAminoConverters(),
   }
 }

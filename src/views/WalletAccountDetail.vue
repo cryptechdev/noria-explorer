@@ -23,7 +23,9 @@
           <b-table :items="objToTable(contractInfo)"></b-table>
           <div class="mt-3" v-if="initMsg">
             <h5>Init Message</h5>
-            <pre style="font-size: 1rem" class="mt-1 p-1 mb-0 pb-0">{{ initMsg }}</pre>
+            <pre style="font-size: 1rem" class="mt-1 p-1 mb-0 pb-0">{{
+              initMsg
+            }}</pre>
           </div>
         </b-card-body>
       </b-card>
@@ -533,6 +535,7 @@
 </template>
 
 <script>
+import { compare } from "compare-versions";
 import AceEditor from "vuejs-ace-editor";
 import { $themeColors } from "@themeConfig";
 import dayjs from "dayjs";
@@ -581,6 +584,7 @@ import OperationModal from "@/views/components/OperationModal/index.vue";
 import ObjectFieldComponent from "./components/ObjectFieldComponent.vue";
 import ChartComponentDoughnut from "./components/charts/ChartComponentDoughnut.vue";
 import { chartColors } from "@/libs/utils";
+import compareVersions from "compare-versions";
 
 export default {
   components: {
@@ -906,6 +910,16 @@ export default {
       }, []);
     },
     setTransactions(data) {
+      const conf = this.$http.getSelectedConfig();
+      const ver = conf.sdk_version || "0.40";
+
+      if (compare(ver, "0.46.0", ">=")) {
+        data.pagination = {
+          next_key: "",
+          total: data.total,
+        };
+      }
+
       this.transactions = data;
     },
     initial() {

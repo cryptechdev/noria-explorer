@@ -25,6 +25,9 @@ function commonProcess(res) {
   if (res && Object.keys(res).includes("result")) {
     return res.result;
   }
+  if (res && Object.keys(res).includes("code") && res.code !== 0) {
+    return undefined;
+  }
   return res;
 }
 
@@ -135,14 +138,28 @@ export default class ChainFetch {
   }
 
   async getTxsBySender(sender, limit = 30, offset = 0) {
-    let url = `/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&pagination.reverse=true&pagination.limit=${limit}&pagination.offset=${offset}&order_by=ORDER_BY_DESC`;
+    const conf = this.getSelectedConfig();
+    const ver = conf.sdk_version || "0.40";
+    let url = "";
+    if (compareVersions(ver, "0.46.0") < 1) {
+      url = `/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&pagination.reverse=true&pagination.limit=${limit}&pagination.offset=${offset}&order_by=ORDER_BY_DESC`;
+    } else {
+      url = `/cosmos/tx/v1beta1/txs?events=message.sender='${sender}'&limit=${limit}&page=${offset}&order_by=2`;
+    }
+
     return this.get(url);
   }
 
   async getTxsByContract(sender, limit = 30, offset = 0) {
-    return this.get(
-      `/cosmos/tx/v1beta1/txs?events=wasm._contract_address='${sender}'&pagination.reverse=true&pagination.limit=${limit}&pagination.offset=${offset}&order_by=ORDER_BY_DESC`
-    );
+    const conf = this.getSelectedConfig();
+    const ver = conf.sdk_version || "0.40";
+    let url = "";
+    if (compareVersions(ver, "0.46.0") < 1) {
+      url = `/cosmos/tx/v1beta1/txs?events=wasm._contract_address='${sender}'&pagination.reverse=true&pagination.limit=${limit}&pagination.offset=${offset}&order_by=ORDER_BY_DESC`;
+    } else {
+      url = `/cosmos/tx/v1beta1/txs?events=wasm._contract_address='${sender}'&limit=${limit}&page=${offset}&orderBy=2`;
+    }
+    return this.get(url);
   }
 
   async getContractInfo(address) {
@@ -261,7 +278,14 @@ export default class ChainFetch {
         denom,
       }));
     }
-    return this.get(`/cosmos/bank/v1beta1/supply/${denom}`).then(
+
+    if (compareVersions(this.config.sdk_version, "0.46") < 0) {
+      return this.get(`/cosmos/bank/v1beta1/supply/${denom}`).then(
+        (data) => commonProcess(data).amount
+      );
+    }
+
+    return this.get(`/cosmos/bank/v1beta1/supply/by_denom?denom=${denom}`).then(
       (data) => commonProcess(data).amount
     );
   }
