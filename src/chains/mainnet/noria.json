@@ -2,7 +2,7 @@
   "chain_name": "noria",
   "api": ["https://archive-lcd.noria.nextnet.zone"],
   "rpc": ["https://archive-rpc.noria.nextnet.zone:443"],
-  "sdk_version": "0.45.12",
+  "sdk_version": "0.47.2",
   "addr_prefix": "noria",
   "logo": "https://noria-assets.sgp1.cdn.digitaloceanspaces.com/noria.svg",
   "coin_type": "118",
