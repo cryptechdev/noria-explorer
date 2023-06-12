@@ -111,6 +111,7 @@
     "@vue/eslint-config-airbnb": "^6.0.0",
     "@vue/eslint-config-standard": "6.1.0",
     "@vue/eslint-config-typescript": "11.0.0",
+    "@vue/runtime-dom": "^3.3.4",
     "@vuepress/plugin-medium-zoom": "^1.7.1",
     "compression-webpack-plugin": "6.1.1",
     "eslint": "^8.15.0",

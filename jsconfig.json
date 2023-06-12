@@ -1,9 +1,14 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "@/*": ["src/*"],
-            "@core/*": ["src/@core/*"],
-        }
-    }
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@core/*": ["src/@core/*"]
+    },
+    "allowJs": true
+  },
+  "vueCompilerOptions": {
+    "target": 2,
+    "extensions": [".vue"]
+  }
 }

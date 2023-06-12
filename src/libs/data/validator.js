@@ -16,6 +16,8 @@ export default class Validator {
     this.unbonding_time = '1970-01-01T00:00:00Z'
     this.commission = new ValidatorCommission()
     this.min_self_delegation = 1
+    this.voting_power = 0
+    this.voting_power_percentage = 0
   }
 
   init(element) {
