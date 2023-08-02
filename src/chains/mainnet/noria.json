@@ -1,7 +1,13 @@
 {
   "chain_name": "noria",
-  "api": ["https://archive-lcd.noria.nextnet.zone", "https://noria-testnet-api.polkachu.com"],
-  "rpc": ["https://archive-rpc.noria.nextnet.zone:443", "https://noria-testnet-api.polkachu.com:443"],
+  "api": [
+    "https://public-lcd.noria.network",
+    "https://noria-testnet-api.polkachu.com"
+  ],
+  "rpc": [
+    "https://public-rpc.noria.network:443",
+    "https://noria-testnet-api.polkachu.com:443"
+  ],
   "sdk_version": "0.47.3",
   "addr_prefix": "noria",
   "logo": "https://noria-assets.sgp1.cdn.digitaloceanspaces.com/noria.svg",
