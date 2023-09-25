@@ -1,12 +1,14 @@
 {
   "chain_name": "noria",
   "api": [
-    "https://public-lcd.noria.network",
-    "https://noria-testnet-api.polkachu.com"
+    "https://noria-testnet-api.polkachu.com",
+    "https://noria-testnet.api.kjnodes.com",
+    "https://t-noria.api.utsa.tech"
   ],
   "rpc": [
-    "https://public-rpc.noria.network:443",
-    "https://noria-testnet-api.polkachu.com:443"
+    "https://noria-testnet-api.polkachu.com:443",
+    "https://noria-testnet.rpc.kjnodes.com:443",
+    "https://t-noria.rpc.utsa.tech:443"
   ],
   "sdk_version": "0.47.3",
   "addr_prefix": "noria",
